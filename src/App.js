@@ -13,16 +13,30 @@ function App() {
   const [aiData, setAiData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [view, setView] = useState('dashboard');
+  // --- NEW: Search History State ---
+  const [history, setHistory] = useState([]);
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem('studyPath_favs')) || [];
-    setFavorites(saved);
+    const savedFavs = JSON.parse(localStorage.getItem('studyPath_favs')) || [];
+    setFavorites(savedFavs);
+
+    // Load History from localStorage
+    const savedHistory = JSON.parse(localStorage.getItem('studyPath_history')) || [];
+    setHistory(savedHistory);
   }, []);
 
   const handleSearch = async (query) => {
+    if (!query) return;
+
+    // --- NEW: Update History Logic ---
+    const updatedHistory = [query, ...history.filter(h => h !== query)].slice(0, 5);
+    setHistory(updatedHistory);
+    localStorage.setItem('studyPath_history', JSON.stringify(updatedHistory));
+
     setView('search');
     setLoading(true);
     setAiData(null); 
+    
     try {
       const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=5`);
       const data = await res.json();
@@ -30,11 +44,11 @@ function App() {
       setBooks(fetchedBooks);
 
       if (fetchedBooks.length > 0) {
-        const insights = await getAIProcessing(query, fetchedBooks);
-        setAiData(insights);
+        const aiResult = await getAIProcessing(query, fetchedBooks);
+        setAiData(aiResult);
       }
     } catch (err) {
-      console.error(err);
+      console.error("Search error:", err);
     } finally {
       setLoading(false);
     }
@@ -54,6 +68,15 @@ function App() {
     }
   };
 
+  const deleteHistoryItem = (e, termToDelete) => {
+  e.stopPropagation(); // Prevents the search from triggering when clicking 'X'
+  const updatedHistory = history.filter(item => item !== termToDelete);
+  setHistory(updatedHistory);
+  localStorage.setItem('studyPath_history', JSON.stringify(updatedHistory));
+};
+
+const recommendedTopics = ["Artificial Intelligence", "Quantum Physics", "World History", "Psychology", "Sustainable Energy"];
+
   return (
     <div className="App">
       <header className="hero">
@@ -61,6 +84,17 @@ function App() {
           StudyPath <span>Explorer</span>
         </h1>
         <SearchBar onSearch={handleSearch} />
+        <div className="topic-suggestions">
+  {recommendedTopics.map((topic, index) => (
+    <button 
+      key={index} 
+      className="topic-pill"
+      onClick={() => handleSearch(topic)}
+    >
+      {topic}
+    </button>
+  ))}
+</div>
       </header>
 
       <main className="container">
@@ -73,6 +107,9 @@ function App() {
                 favorites={favorites} 
                 onRemove={toggleFavorite} 
                 onClearAll={clearFavorites}
+                // --- Pass history to dashboard if you want it there too ---
+                history={history}
+                onHistoryClick={handleSearch}
               />
             ) : (
               <div className="layout">
@@ -90,6 +127,27 @@ function App() {
                   />
                 </section>
                 <aside className="sidebar">
+                  {/* --- NEW: History Section in Sidebar --- */}
+                  <div className="history-container">
+                    <h3>Recent Searches</h3>
+                    {history.length > 0 ? (
+                      <ul className="history-list">
+  {history.map((term, index) => (
+    <li key={index} onClick={() => handleSearch(term)} className="history-item">
+      <span>🔍 {term}</span>
+      <button 
+        className="delete-history-btn" 
+        onClick={(e) => deleteHistoryItem(e, term)}
+      >
+        ×
+      </button>
+    </li>
+  ))}
+</ul>
+                    ) : (
+                      <p className="empty-text">No recent searches</p>
+                    )}
+                  </div>
                   <Favorites favorites={favorites} onRemove={toggleFavorite} />
                 </aside>
               </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Dashboard = ({ favorites, onRemove, onClearAll }) => {
+const Dashboard = ({ favorites, onRemove, onClearAll, history, onHistoryClick}) => {
   const [quote, setQuote] = useState({ text: "", author: "" });
 
   const quotes = [
@@ -74,11 +74,24 @@ const Dashboard = ({ favorites, onRemove, onClearAll }) => {
           )}
         </section>
 
+        <aside className="dashboard-sidebar">
+          <div className="stat-card">
+            <h4>Quick Jump</h4>
+            <div className="history-tags">
+              {history.map((term, i) => (
+                <span key={i} className="history-tag" onClick={() => onHistoryClick(term)}>
+                  {term}
+                </span>
+              ))}
+            </div>
+          </div>
+
         <div className="stat-card settings-card" style={{marginTop: '30px', background: '#fffafa'}}>
            <h4>Account Control</h4>
            <p style={{fontSize: '0.8rem', color: '#64748b'}}>Reset your library and clear cached data.</p>
            <button className="clear-btn" onClick={onClearAll}>Reset Library</button>
         </div>
+        </aside>
       </div>
     </div>
   );

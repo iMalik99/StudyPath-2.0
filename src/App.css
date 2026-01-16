@@ -350,3 +350,141 @@ body {
 .settings-card {
   border: 1px dashed #fecaca;
 }
+
+.book-description {
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.5;
+  margin: 12px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ai-content {
+  background: #f0f7ff; /* Light blue tint to distinguish from standard text */
+  border-left: 4px solid #6366f1;
+  padding: 12px;
+  border-radius: 4px;
+  margin-top: 15px;
+}
+
+.history-container {
+  margin-bottom: 30px;
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.history-list li {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: 0.2s;
+}
+
+.history-list li:hover {
+  background: #f1f5f9;
+  color: #6366f1;
+}
+
+.history-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.history-tag {
+  background: #f1f5f9;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.history-tag:hover {
+  border-color: #6366f1;
+  color: #6366f1;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  margin-bottom: 4px;
+}
+
+.history-item:hover {
+  background: #f8fafc;
+  color: #6366f1;
+}
+
+.delete-history-btn {
+  background: none;
+  border: none;
+  color: #cbd5e1;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 5px;
+  transition: color 0.2s;
+}
+
+.delete-history-btn:hover {
+  color: #ef4444; /* Turns red on hover */
+}
+
+/* History Tags on Dashboard */
+.history-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #f1f5f9;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: 0.3s;
+}
+
+.topic-suggestions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  padding: 0 20px;
+}
+
+.topic-pill {
+  background: #b8b8c7;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 6px 15px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.topic-pill:hover {
+  background: white;
+  color: #696bb7; /* Your primary brand color */
+  transform: translateY(-2px);
+}
